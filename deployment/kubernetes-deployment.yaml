@@ -1,0 +1,51 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: foo-deployment
+  labels:
+    buildVersion: "#{Build.BuildID}#"
+    releaseVersion: "#{Release.ReleaseName}#"
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: "0%"
+      maxSurge: "100%"
+  revisionHistoryLimit: 5
+  template:
+    metadata:
+      labels:
+        app: foo
+    spec:
+      containers:
+      - name: foo
+        image: k8sbuild.azurecr.io/gateway-service:#{Build.BuildID}#
+        ports:
+        - containerPort: 80
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 10
+          periodSeconds: 5
+      imagePullSecrets:
+      - name: k8sbuild-azurecr
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: foo-service
+  labels:
+    buildVersion: "#{Build.BuildID}#"
+    releaseVersion: "#{Release.ReleaseName}#"
+spec:
+  selector:
+    app: foo
+  ports:
+  - port: 80
+    targetPort: 80
+  type: LoadBalancer
+  

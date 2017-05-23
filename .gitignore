@@ -29,6 +29,7 @@ msbuild.err
 msbuild.wrn
 
 out/
+*.trx
 
 # Visual Studio 2015
 .vs/
