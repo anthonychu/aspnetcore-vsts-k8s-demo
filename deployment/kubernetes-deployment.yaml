@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
       - name: foo
-        image: k8sbuild.azurecr.io/gateway-service:#{Build.BuildID}#
+        image: k8sbuild.azurecr.io/foo:#{Build.BuildID}#
         ports:
         - containerPort: 80
         readinessProbe:
