@@ -15,7 +15,7 @@ namespace Foo.Web.Controllers
 
         public IActionResult About()
         {
-            ViewData["Message"] = "About us";
+            ViewData["Message"] = "About us.";
 
             return View();
         }
